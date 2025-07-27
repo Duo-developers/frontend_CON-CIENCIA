@@ -1,21 +1,66 @@
+import { useState, useEffect, useRef } from 'react'
+
 export function Home() {
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false)
+  const [isVideoVisible, setIsVideoVisible] = useState(false)
+  const videoRef = useRef(null)
+  const videoContainerRef = useRef(null)
+
+  // Intersection Observer for lazy loading video
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVideoVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (videoContainerRef.current) {
+      observer.observe(videoContainerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  const handleVideoLoad = () => {
+    setIsVideoLoaded(true)
+  }
+
   return (
     <div className="bg-light-bg text-dark-text font-inter">
       {/* Hero Section */}
       <section id="inicio" className="relative">
         <div className="container mx-auto px-6 py-12">
-          <div className="relative text-white rounded-2xl overflow-hidden">
-            {/* Video Principal */}
-            <video 
-              className="w-full h-auto min-h-[500px] md:min-h-[600px] object-cover rounded-2xl"
-              autoPlay 
-              muted
-              loop 
-              playsInline
-            >
-              <source src="https://res.cloudinary.com/dwc4ynoj9/video/upload/v1752970437/Video_Listo_Biolog%C3%ADa_Por_Favor_i0jt8f.mp4" type="video/mp4" />
-              Tu navegador no soporta el elemento de video.
-            </video>
+          <div ref={videoContainerRef} className="relative text-white rounded-2xl overflow-hidden">
+            {/* Video Principal with lazy loading */}
+            {isVideoVisible && (
+              <video 
+                ref={videoRef}
+                className="w-full h-auto min-h-[500px] md:min-h-[600px] object-cover rounded-2xl"
+                autoPlay 
+                muted
+                loop 
+                playsInline
+                onLoadedData={handleVideoLoad}
+                preload="metadata"
+              >
+                <source 
+                  src="https://res.cloudinary.com/dwc4ynoj9/video/upload/v1752970437/Video_Listo_Biolog%C3%ADa_Por_Favor_i0jt8f.mp4" 
+                  type="video/mp4" 
+                />
+                Tu navegador no soporta el elemento de video.
+              </video>
+            )}
+            
+            {/* Loading placeholder */}
+            {!isVideoLoaded && isVideoVisible && (
+              <div className="w-full min-h-[500px] md:min-h-[600px] bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+              </div>
+            )}
             
             {/* Overlay sutil solo para el texto */}
             <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center">
@@ -59,6 +104,8 @@ export function Home() {
                   src="https://placehold.co/600x400/3b82f6/ffffff?text=Sobre+Nosotros" 
                   alt="Sobre CON-CIENCIA" 
                   className="rounded-2xl shadow-lg w-full h-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

@@ -30,4 +30,10 @@ export default {
       },
     },
   },
+  plugins: [],
+  // Optimize for production
+  corePlugins: {
+    // Disable unused features to reduce bundle size
+    preflight: true,
+  },
 }

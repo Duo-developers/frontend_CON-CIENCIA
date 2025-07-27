@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import AuthContext from './AuthContext';
 import { getCurrentUser } from '../../services/api';
 
@@ -20,12 +20,9 @@ const AuthProvider = ({ children }) => {
         setUser(userData);
         setIsLoggedIn(true);
         
-        console.log("Datos del usuario en localStorage:", userData); // Para depuración
-        
         // También verificamos con el servidor si la sesión sigue siendo válida
         try {
           const response = await getCurrentUser();
-          console.log("Respuesta de getCurrentUser:", response.data); // Para depuración
           
           if (response.data.success) {
             // Mantener el token que ya teníamos
@@ -33,8 +30,6 @@ const AuthProvider = ({ children }) => {
               ...response.data.user,
               token: userData.token
             };
-            
-            console.log("Datos actualizados del usuario:", updatedUserData); // Para depuración
             
             // Actualizar localStorage y estado con datos frescos del servidor
             localStorage.setItem('usuario', JSON.stringify(updatedUserData));
@@ -89,14 +84,14 @@ const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [checkAuthStatus]);
 
-  // Valores que exponemos en el contexto
-  const contextValue = {
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
     user,
     isLoggedIn,
     isLoading,
     updateAuthState,
     checkAuthStatus
-  };
+  }), [user, isLoggedIn, isLoading, updateAuthState, checkAuthStatus]);
 
   return (
     <AuthContext.Provider value={contextValue}>
