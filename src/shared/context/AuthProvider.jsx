@@ -74,6 +74,24 @@ const AuthProvider = ({ children }) => {
     }
   }, [checkAuthStatus]);
 
+  // Función para actualizar los datos del usuario
+  const updateUser = useCallback((updatedUserData) => {
+    if (updatedUserData) {
+      // Mantener el token existente
+      const currentToken = user?.token;
+      const newUserData = {
+        ...updatedUserData,
+        token: currentToken
+      };
+      
+      // Actualizar localStorage
+      localStorage.setItem('usuario', JSON.stringify(newUserData));
+      
+      // Actualizar estado
+      setUser(newUserData);
+    }
+  }, [user]);
+
   // Verificar autenticación al cargar la aplicación
   useEffect(() => {
     checkAuthStatus();
@@ -95,6 +113,7 @@ const AuthProvider = ({ children }) => {
     isLoggedIn,
     isLoading,
     updateAuthState,
+    updateUser,
     checkAuthStatus
   };
 

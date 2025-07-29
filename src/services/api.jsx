@@ -68,6 +68,58 @@ export const getCurrentUser = async () => {
     }
 }
 
+/**
+ * Actualiza la información del perfil del usuario autenticado.
+ * @param {Object} userData - Los datos del usuario a actualizar (name, email, username)
+ * @returns {Promise} La promesa con la respuesta del API
+ */
+export const updateUser = async (userData) => {
+    try {
+        // Usar la ruta correcta del backend: PUT /user/me
+        const response = await apiClient.put('/user/me', userData);
+        return response.data;
+    } catch (error) {
+        console.error("Error en updateUser:", error);
+        throw error;
+    }
+}
+
+/**
+ * Actualiza la contraseña del usuario autenticado.
+ * @param {Object} passwordData - Objeto con currentPassword y newPassword
+ * @returns {Promise} La promesa con la respuesta del API
+ */
+export const updatePassword = async (passwordData) => {
+    try {
+        // Usar la ruta correcta del backend: PATCH /user/password
+        const response = await apiClient.patch('/user/password', passwordData);
+        return response.data;
+    } catch (error) {
+        console.error("Error en updatePassword:", error);
+        throw error;
+    }
+}
+
+/**
+ * Actualiza la foto de perfil del usuario autenticado.
+ * @param {FormData} formData - FormData con la imagen
+ * @returns {Promise} La promesa con la respuesta del API
+ */
+export const updateProfilePicture = async (formData) => {
+    try {
+        // Usar la ruta correcta del backend: PATCH /user/me/profile-picture
+        const response = await apiClient.patch('/user/me/profile-picture', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error en updateProfilePicture:", error);
+        throw error;
+    }
+}
+
 
 
 // Artículos
@@ -89,3 +141,13 @@ export const getComments = (articleId) => apiClient.get(`/comment/article/${arti
 export const postComment = (articleId, data) => apiClient.post(`/comment/${articleId}`, data);
 export const editComment = (commentId, data) => apiClient.put(`/comment/${commentId}`, data);
 export const deleteComment = (commentId) => apiClient.delete(`/comment/${commentId}`);
+
+// Objeto de servicios de autenticación y usuario
+export const authService = {
+    login,
+    register,
+    getCurrentUser,
+    updateUser,
+    updatePassword,
+    updateProfilePicture
+};

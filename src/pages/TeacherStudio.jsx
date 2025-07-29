@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useArticles } from '../shared/hooks/useTeacherStudie';
 import { useEvents } from '../shared/hooks/useEvents';
+import toast from 'react-hot-toast';
 
 const CATEGORY_OPTIONS_ARTICLE = [
   'Biology', 'Chemistry', 'History', 'Medicine', 'Astronomy',
@@ -63,13 +64,16 @@ export function TeacherStudio() {
       const category = form.category.value;
 
       if (!title) {
-        return alert('El título es obligatorio');
+        toast.error('El título es obligatorio');
+        return;
       }
       if (!content) {
-        return alert('El contenido es obligatorio');
+        toast.error('El contenido es obligatorio');
+        return;
       }
       if (!CATEGORY_OPTIONS_ARTICLE.includes(category)) {
-        return alert('Categoría no válida');
+        toast.error('Categoría no válida');
+        return;
       }
 
       // Procesamiento y normalización de URLs de YouTube
@@ -112,17 +116,20 @@ export function TeacherStudio() {
       try {
         if (editingItem) {
           if (!editingItem.aid) {
-            return alert('Error interno: ID de artículo inválido');
+            toast.error('Error interno: ID de artículo inválido');
+            return;
           }
           await updateArticle(editingItem.aid, data);
+          toast.success('Artículo actualizado exitosamente');
         } else {
           await createArticle(data);
+          toast.success('Artículo creado exitosamente');
         }
         setModalOpen(false);
         setEditingItem(null);
       } catch (error) {
         console.error('Error al guardar artículo:', error.response?.data || error);
-        alert(error.response?.data?.message || 'Error al guardar el artículo');
+        toast.error(error.response?.data?.message || 'Error al guardar el artículo');
       }
     } else {
       // -----------------------
@@ -143,14 +150,16 @@ export function TeacherStudio() {
       try {
         if (editingItem) {
           await updateEvent(editingItem.eid, data);
+          toast.success('Evento actualizado exitosamente');
         } else {
           await createEvent(data);
+          toast.success('Evento creado exitosamente');
         }
         setModalOpen(false);
         setEditingItem(null);
       } catch (error) {
         console.error('Error al guardar evento:', error.response?.data || error);
-        alert(error.response?.data?.message || 'Error al guardar el evento');
+        toast.error(error.response?.data?.message || 'Error al guardar el evento');
       }
     }
   };
