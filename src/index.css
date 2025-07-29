@@ -39,6 +39,50 @@ html, body, #root {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Asegurar que las clases personalizadas de Tailwind funcionen */
+.text-dark-text {
+  color: #111827 !important;
+}
+
+.text-medium-text {
+  color: #374151 !important;
+}
+
+.text-primary-blue {
+  color: #3b82f6 !important;
+}
+
+.bg-primary-blue {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.bg-light-bg {
+  background-color: #ffffff !important;
+}
+
+.bg-dark-bg {
+  background-color: #111827 !important;
+}
+
+/* Asegurar que el footer tenga colores correctos */
+.footer-dark {
+  background-color: #111827 !important;
+  color: #ffffff !important;
+}
+
+/* Clase específica para el botón Register */
+.register-button {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.register-button:hover {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
 /* Estilos base para enlaces */
 a {
   color: var(--color-primary-blue);

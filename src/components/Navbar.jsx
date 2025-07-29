@@ -142,9 +142,9 @@ export function Navbar() {
     }
 
     return (
-      <div className="hidden md:flex items-center space-x-4">
+      <div className="flex items-center space-x-4">
         <Link to="/login" className="text-medium-text hover:text-primary-blue transition-colors duration-300">Login</Link>
-        <Link to="/register" className="bg-primary-blue text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-transform duration-300 hover:scale-105">Register</Link>
+        <Link to="/register" className="register-button px-4 py-2 rounded-full hover:bg-blue-700 transition-transform duration-300 hover:scale-105">Register</Link>
       </div>
     );
   };
@@ -214,7 +214,7 @@ export function Navbar() {
     return (
       <div className="pt-4 border-t border-gray-200 space-y-2">
         <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-medium-text hover:text-primary-blue transition-colors duration-300 px-6 py-2">Login</Link>
-        <Link to="/register" onClick={() => setIsMenuOpen(false)} className="block bg-primary-blue text-white mx-6 my-2 px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 text-center">Register</Link>
+        <Link to="/register" onClick={() => setIsMenuOpen(false)} className="block register-button mx-6 my-2 px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 text-center">Register</Link>
       </div>
     );
   };
@@ -241,7 +241,9 @@ export function Navbar() {
         </div>
 
         {/* Sección de autenticación dinámica */}
-        {renderAuthSection()}
+        <div className="flex items-center space-x-4">
+          {renderAuthSection()}
+        </div>
 
         {/* Botón de menú móvil */}
         <div className="md:hidden">
