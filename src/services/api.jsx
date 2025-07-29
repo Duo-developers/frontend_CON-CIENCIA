@@ -67,3 +67,25 @@ export const getCurrentUser = async () => {
         throw error;
     }
 }
+
+
+
+// Artículos
+export const createArticle = (data) => apiClient.post('/article', data);
+export const getMyArticles = () => apiClient.get('/article'); // singular
+export const getArticleById = (id) => apiClient.get(`/article/${id}`);
+export const updateArticle = (id, data) => apiClient.put(`/article/${id}`, data);
+export const deleteArticle = (id) => apiClient.delete(`/article/${id}`);
+
+// Eventos
+export const createEvent = (data) => apiClient.post('/event', data);
+export const getMyEvents = () => apiClient.get('/event'); // singular
+export const getEventById = (id) => apiClient.get(`/event/${id}`);
+export const updateEvent = (id, data) => apiClient.put(`/event/${id}`, data);
+export const deleteEvent = (id) => apiClient.delete(`/event/${id}`);
+
+// Comentarios
+export const getComments = (articleId) => apiClient.get(`/comment/article/${articleId}`);
+export const postComment = (articleId, data) => apiClient.post(`/comment/${articleId}`, data);
+export const editComment = (commentId, data) => apiClient.put(`/comment/${commentId}`, data);
+export const deleteComment = (commentId) => apiClient.delete(`/comment/${commentId}`);
