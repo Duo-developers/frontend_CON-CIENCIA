@@ -7,6 +7,7 @@ import SobreNosotros from './components/homeNosotros/homeNosotros'
 import { RegisterPage } from './pages/Auth'
 import { TeacherStudio } from './pages/TeacherStudio'
 import { AdminStudio } from './pages/AdminStudio'
+import { MyAccountPage } from './pages/MyAccountPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 export function AppRoutes() {
@@ -21,6 +22,11 @@ export function AppRoutes() {
       <Route path='/register' element={<RegisterPage />}/>
       
       {/* Rutas Protegidas */}
+      <Route path='/mi-cuenta' element={
+        <ProtectedRoute requiredRoles={["USER_ROLE", "TEACHER_ROLE", "ADMIN_ROLE"]}>
+          <MyAccountPage />
+        </ProtectedRoute>
+      }/>
       <Route path='/teacher-studio' element={
         <ProtectedRoute requiredRoles={["TEACHER_ROLE"]}>
           <TeacherStudio />

@@ -115,7 +115,17 @@ export function Navbar() {
                     <p className="text-sm text-blue-300">@{user && user.username ? user.username : 'usuario'}</p>
                   </div>
                 </div>
-                <div className="px-3 py-2">
+                <div className="px-3 py-2 space-y-2">
+                  <Link 
+                    to="/mi-cuenta"
+                    onClick={() => setIsProfileMenuOpen(false)}
+                    className="w-full text-left px-4 py-3 text-base font-medium text-white bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-3 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Mi Cuenta
+                  </Link>
                   <button 
                     onClick={logout}
                     className="w-full text-center px-4 py-3 text-base font-bold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 rounded-lg flex items-center justify-center gap-3 transition-colors shadow-md border border-red-800"
@@ -133,8 +143,8 @@ export function Navbar() {
 
     return (
       <div className="hidden md:flex items-center space-x-4">
-        <Link to="/login" className="text-gray-600 hover:text-primary-blue transition-colors duration-300 font-medium">Login</Link>
-        <Link to="/register" className="bg-primary-blue text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-105 font-medium">Register</Link>
+        <Link to="/login" className="text-medium-text hover:text-primary-blue transition-colors duration-300">Login</Link>
+        <Link to="/register" className="bg-primary-blue text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-transform duration-300 hover:scale-105">Register</Link>
       </div>
     );
   };
@@ -179,6 +189,17 @@ export function Navbar() {
             </Link>
           )}
           
+          <Link 
+            to="/mi-cuenta" 
+            onClick={() => setIsMenuOpen(false)}
+            className="mx-2 bg-gray-600 text-white font-medium py-3 rounded-lg hover:bg-gray-700 flex items-center justify-center gap-2 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            Mi Cuenta
+          </Link>
+          
           <button 
             onClick={() => { logout(); setIsMenuOpen(false); }}
             className="w-full text-center bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-4 rounded-lg hover:from-red-700 hover:to-red-800 transition-colors duration-300 font-bold flex items-center justify-center gap-3 mx-2 shadow-lg border-2 border-red-800"
@@ -192,8 +213,8 @@ export function Navbar() {
 
     return (
       <div className="pt-4 border-t border-gray-200 space-y-2">
-        <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-gray-600 hover:text-primary-blue transition-colors duration-300 font-medium px-6 py-2">Login</Link>
-        <Link to="/register" onClick={() => setIsMenuOpen(false)} className="block bg-primary-blue text-white mx-6 my-2 px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 text-center font-medium">Register</Link>
+        <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-medium-text hover:text-primary-blue transition-colors duration-300 px-6 py-2">Login</Link>
+        <Link to="/register" onClick={() => setIsMenuOpen(false)} className="block bg-primary-blue text-white mx-6 my-2 px-6 py-2 rounded-full hover:bg-blue-700 transition-colors duration-300 text-center">Register</Link>
       </div>
     );
   };
@@ -213,10 +234,10 @@ export function Navbar() {
         
         {/* Navegación de escritorio */}
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className={`font-medium transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-gray-600 hover:text-primary-blue'}`}>Inicio</Link>
-          <Link to="/blog" className={`font-medium transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-gray-600 hover:text-primary-blue'}`}>Blog</Link>
-          <Link to="/eventos" className={`font-medium transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-gray-600 hover:text-primary-blue'}`}>Eventos</Link>
-          <Link to="/sobre-nosotros" className={`font-medium transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-gray-600 hover:text-primary-blue'}`}>Sobre Nosotros</Link>
+          <Link to="/" className={`transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
+          <Link to="/blog" className={`transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
+          <Link to="/eventos" className={`transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
+          <Link to="/sobre-nosotros" className={`transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
         </div>
 
         {/* Sección de autenticación dinámica */}
@@ -224,20 +245,26 @@ export function Navbar() {
 
         {/* Botón de menú móvil */}
         <div className="md:hidden">
-          <button onClick={toggleMenu} className="text-gray-600 hover:text-primary-blue">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <button 
+            onClick={toggleMenu} 
+            className="text-medium-text hover:text-primary-blue"
+            id="mobile-menu-button"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
           </button>
         </div>
       </nav>
 
       {/* Menú móvil */}
       {isMenuOpen && (
-        <div className="md:hidden bg-light-bg border-t border-gray-200">
-          <div className="px-2 py-4 space-y-1">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className={`block font-medium rounded-lg px-6 py-2 ${isActive('/') ? 'text-primary-blue bg-blue-50' : 'text-gray-600 hover:text-primary-blue hover:bg-gray-50'} transition-colors duration-300`}>Inicio</Link>
-            <Link to="/blog" onClick={() => setIsMenuOpen(false)} className={`block font-medium rounded-lg px-6 py-2 ${isActive('/blog') ? 'text-primary-blue bg-blue-50' : 'text-gray-600 hover:text-primary-blue hover:bg-gray-50'} transition-colors duration-300`}>Blog</Link>
-            <Link to="/eventos" onClick={() => setIsMenuOpen(false)} className={`block font-medium rounded-lg px-6 py-2 ${isActive('/eventos') ? 'text-primary-blue bg-blue-50' : 'text-gray-600 hover:text-primary-blue hover:bg-gray-50'} transition-colors duration-300`}>Eventos</Link>
-            <Link to="/sobre-nosotros" onClick={() => setIsMenuOpen(false)} className={`block font-medium rounded-lg px-6 py-2 ${isActive('/sobre-nosotros') ? 'text-primary-blue bg-blue-50' : 'text-gray-600 hover:text-primary-blue hover:bg-gray-50'} transition-colors duration-300`}>Sobre Nosotros</Link>
+        <div className="md:hidden bg-light-bg border-t border-gray-200" id="mobile-menu">
+          <div className="px-6 py-4 space-y-2">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
+            <Link to="/blog" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
+            <Link to="/eventos" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
+            <Link to="/sobre-nosotros" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
             {renderMobileAuthSection()}
           </div>
         </div>

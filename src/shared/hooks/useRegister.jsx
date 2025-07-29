@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../services/api';
+import toast from 'react-hot-toast';
 
 /**
  * Hook personalizado para gestionar la lógica del formulario de registro.
@@ -67,11 +68,18 @@ export const useRegister = () => {
 
     try {
       await register(dataToSend);
-      alert('¡Cuenta creada exitosamente! Serás redirigido para iniciar sesión.');
-      navigate('/login');
+      toast.success('¡Cuenta creada exitosamente! Serás redirigido para iniciar sesión.', {
+        duration: 3000,
+      });
+      
+      // Esperar un poco antes de redirigir para que el usuario vea el mensaje
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
     } catch (err) {
       const msg = err.response?.data?.errors?.[0]?.msg || err.response?.data?.message || 'Error al registrar la cuenta.';
       setError(msg);
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }
