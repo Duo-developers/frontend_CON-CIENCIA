@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* ===================================
+   ESTILOS BASE PARA CON-CIENCIA
+   =================================== */
+
+/* Reset básico y estilos base */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Variables CSS personalizadas para CON-CIENCIA */
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  /* Colores de marca CON-CIENCIA */
+  --color-primary-blue: #3b82f6;
+  --color-secondary-green: #22c55e;
+  --color-tertiary-sky: #0ea5e9;
+  --color-dark-bg: #111827;
+  --color-light-bg: #ffffff;
+  --color-surface: #f9fafb;
+  --color-dark-text: #1f2937;
+  --color-medium-text: #4b5563;
+  
+  /* Configuración base */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Estilos base para enlaces */
+a {
+  color: var(--color-primary-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1d4ed8;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
