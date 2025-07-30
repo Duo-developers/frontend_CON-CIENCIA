@@ -9,6 +9,8 @@ import { TeacherStudio } from './pages/TeacherStudio'
 import { AdminStudio } from './pages/AdminStudio'
 import { MyAccountPage } from './pages/MyAccountPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { ForgotPasswordPage } from './pages/Auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/Auth/ResetPasswordPage';
 
 export function AppRoutes() {
   return (
@@ -20,6 +22,8 @@ export function AppRoutes() {
       <Route path='/sobre-nosotros' element={<SobreNosotros />}/>
       <Route path='/login' element={<LoginPage />}/>
       <Route path='/register' element={<RegisterPage />}/>
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
       
       {/* Rutas Protegidas */}
       <Route path='/mi-cuenta' element={

@@ -14,6 +14,11 @@ export function MyAccountPage() {
   } = useUserAccount();
 
   const [activeTab, setActiveTab] = useState('profile');
+  const [originalProfileData, setOriginalProfileData] = useState({
+    name: '',
+    email: '',
+    username: ''
+  });
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -27,17 +32,44 @@ export function MyAccountPage() {
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
+  const [dragActive, setDragActive] = useState(false);
+  
+  // Estados para mostrar/ocultar contraseñas
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
-  // Actualizar los datos del formulario cuando el usuario cambie
+  // Actualizar los datos del formulario y los datos originales cuando el usuario cambie
   useEffect(() => {
     if (user) {
-      setProfileData({
+      const userData = {
         name: user.name || '',
         email: user.email || '',
         username: user.username || ''
-      });
+      };
+      
+      setProfileData(userData);
+      setOriginalProfileData(userData);
     }
   }, [user]);
+
+  // Verifica si hay cambios en el perfil
+  const hasProfileChanges = () => {
+    return (
+      profileData.name !== originalProfileData.name ||
+      profileData.email !== originalProfileData.email ||
+      profileData.username !== originalProfileData.username
+    );
+  };
+
+  // Verifica si los campos de contraseña tienen datos válidos
+  const hasValidPasswordData = () => {
+    return (
+      passwordData.currentPassword.trim() !== '' &&
+      passwordData.newPassword.trim() !== '' &&
+      passwordData.confirmPassword.trim() !== '' &&
+      passwordData.newPassword === passwordData.confirmPassword
+    );
+  };
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -67,12 +99,57 @@ export function MyAccountPage() {
     }
   };
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        setProfileImage(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setPreviewImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+        
+        // Actualizar el input de archivo para que refleje el archivo seleccionado
+        if (fileInputRef.current) {
+          // Esta es una forma de trabajar con el input de tipo file, aunque no es perfecta
+          // debido a restricciones de seguridad del navegador
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          fileInputRef.current.files = dataTransfer.files;
+        }
+      }
+    }
+  };
+
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
     clearMessages();
     
     const result = await updateProfile(profileData);
     if (result.success) {
+      // Actualizar los datos originales después de una actualización exitosa
+      setOriginalProfileData({
+        name: result.user.name || '',
+        email: result.user.email || '',
+        username: result.user.username || ''
+      });
+      
       // Mantener los datos actualizados en el formulario
       setProfileData({
         name: result.user.name || '',
@@ -272,10 +349,10 @@ export function MyAccountPage() {
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !hasProfileChanges()}
                   className="w-full bg-primary-blue text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                 >
-                  {loading ? 'Actualizando...' : 'Actualizar Información'}
+                  {loading ? 'Actualizando...' : hasProfileChanges() ? 'Actualizar Información' : 'Sin Cambios'}
                 </button>
               </form>
             )}
@@ -287,30 +364,66 @@ export function MyAccountPage() {
                   <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
                     Contraseña Actual
                   </label>
-                  <input
-                    type="password"
-                    id="currentPassword"
-                    name="currentPassword"
-                    value={passwordData.currentPassword}
-                    onChange={handlePasswordChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showCurrentPassword ? "text" : "password"}
+                      id="currentPassword"
+                      name="currentPassword"
+                      value={passwordData.currentPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent pr-10"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-800"
+                    >
+                      {showCurrentPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
                   <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
                     Nueva Contraseña
                   </label>
-                  <input
-                    type="password"
-                    id="newPassword"
-                    name="newPassword"
-                    value={passwordData.newPassword}
-                    onChange={handlePasswordChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      id="newPassword"
+                      name="newPassword"
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent pr-10"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-800"
+                    >
+                      {showNewPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   <p className="text-sm text-gray-500 mt-1">
                     La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
                   </p>
@@ -336,10 +449,10 @@ export function MyAccountPage() {
 
                 <button
                   type="submit"
-                  disabled={loading || passwordData.newPassword !== passwordData.confirmPassword}
+                  disabled={loading || !hasValidPasswordData()}
                   className="w-full bg-primary-blue text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                 >
-                  {loading ? 'Cambiando...' : 'Cambiar Contraseña'}
+                  {loading ? 'Cambiando...' : hasValidPasswordData() ? 'Cambiar Contraseña' : 'Complete todos los campos'}
                 </button>
               </form>
             )}
@@ -353,27 +466,60 @@ export function MyAccountPage() {
                 </div>
 
                 <form onSubmit={handleImageSubmit} className="space-y-4">
-                  <div>
-                    <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700 mb-2">
-                      Seleccionar nueva foto
-                    </label>
+                  <div 
+                    className={`relative border-2 ${dragActive ? 'border-primary-blue bg-blue-50' : 'border-dashed border-gray-300'} rounded-lg p-6 text-center cursor-pointer transition-all duration-200 hover:bg-gray-50`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  >
                     <input
                       type="file"
                       id="profileImage"
                       ref={fileInputRef}
                       accept="image/*"
                       onChange={handleImageChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
+                      className="hidden"
                     />
-                    <p className="text-sm text-gray-500 mt-1">
-                      Formatos soportados: JPG, PNG, GIF. Tamaño máximo: 5MB.
-                    </p>
+                    <div className="flex flex-col items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-lg font-medium text-gray-700 mb-1">
+                        {previewImage ? 'Cambiar imagen' : 'Seleccionar imagen'}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Arrastra y suelta una imagen aquí o haz clic para seleccionar
+                      </p>
+                      <p className="text-xs text-gray-400 mt-2">
+                        Formatos soportados: JPG, PNG, GIF. Tamaño máximo: 5MB.
+                      </p>
+                    </div>
                   </div>
 
                   {previewImage && (
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                      <p className="text-sm font-medium text-gray-700 mb-3">Vista previa</p>
                       <UserAvatar size="large" />
-                      <p className="text-sm text-gray-500 mt-2">Vista previa</p>
+                      <div className="mt-3 flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfileImage(null);
+                            setPreviewImage(null);
+                            if (fileInputRef.current) {
+                              fileInputRef.current.value = '';
+                            }
+                          }}
+                          className="text-sm text-red-600 hover:text-red-800 flex items-center"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Eliminar
+                        </button>
+                      </div>
                     </div>
                   )}
 
@@ -382,7 +528,7 @@ export function MyAccountPage() {
                     disabled={loading || !profileImage}
                     className="w-full bg-primary-blue text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                   >
-                    {loading ? 'Subiendo...' : 'Actualizar Foto de Perfil'}
+                    {loading ? 'Subiendo...' : profileImage ? 'Actualizar Foto de Perfil' : 'Selecciona una imagen'}
                   </button>
                 </form>
               </div>
