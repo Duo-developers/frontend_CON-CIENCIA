@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3001/conciencia/v1/',
+    baseURL: 'https://backend-con-ciencia.vercel.app/conciencia/v1/',
     timeout: 10000,
 });
 
