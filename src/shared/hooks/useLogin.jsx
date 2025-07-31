@@ -11,10 +11,8 @@ export const useLogin = () => {
     setLoading(true);
     setError(null);
     
-    // Extraemos el identificador y la contraseña
     const { identifier, password } = credentials;
 
-    // Determinamos si el identificador es un email y construimos el objeto de datos
     const isEmail = identifier.includes('@');
     const loginData = {
       password,
@@ -22,11 +20,10 @@ export const useLogin = () => {
     };
 
     try {
-      const response = await login(loginData); // Usamos la función `login` importada
+      const response = await login(loginData);
       
-      console.log("Respuesta del login:", response.data); // Para depuración
+      console.log("Respuesta del login:", response.data);
       
-      // Guardar los datos del usuario enriquecidos
       const userData = {
         ...response.data.user,
         token: response.data.user.token
@@ -34,7 +31,6 @@ export const useLogin = () => {
       
       localStorage.setItem('usuario', JSON.stringify(userData));
       
-      // Obtener datos completos del usuario
       try {
         const userDetails = await getCurrentUser();
         if (userDetails.data && userDetails.data.success) {
@@ -54,7 +50,6 @@ export const useLogin = () => {
       
       return { success: true };
     } catch (err) {
-      // Capturamos y establecemos el mensaje de error para mostrarlo en la UI
       const message = err.response?.data?.message || 'Error al iniciar sesión. Verifica tus credenciales.';
       setError(message);
       return { success: false };
@@ -63,6 +58,5 @@ export const useLogin = () => {
     }
   };
 
-  // El hook retorna el estado y la función para que el componente los utilice
   return { login: loginUser, loading, error, setError };
 };

@@ -1,4 +1,3 @@
-// hooks/useEvents.jsx
 import { useState, useEffect } from 'react';
 import { getMyEvents, createEvent, updateEvent, deleteEvent } from '../../services/api';
 

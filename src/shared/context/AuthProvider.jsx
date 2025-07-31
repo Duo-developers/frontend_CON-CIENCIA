@@ -7,50 +7,40 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Función para verificar el estado de autenticación
   const checkAuthStatus = useCallback(async () => {
     setIsLoading(true);
     try {
       const userDetails = localStorage.getItem('usuario');
       if (userDetails) {
-        // Si hay datos en localStorage, intentamos recuperarlos
         const userData = JSON.parse(userDetails);
         
-        // Establecer los datos del localStorage primero
         setUser(userData);
         setIsLoggedIn(true);
         
-        console.log("Datos del usuario en localStorage:", userData); // Para depuración
+        console.log("Datos del usuario en localStorage:", userData); 
         
-        // También verificamos con el servidor si la sesión sigue siendo válida
         try {
           const response = await getCurrentUser();
-          console.log("Respuesta de getCurrentUser:", response.data); // Para depuración
-          
+          console.log("Respuesta de getCurrentUser:", response.data);
           if (response.data.success) {
-            // Mantener el token que ya teníamos
             const updatedUserData = {
               ...response.data.user,
               token: userData.token
             };
             
-            console.log("Datos actualizados del usuario:", updatedUserData); // Para depuración
+            console.log("Datos actualizados del usuario:", updatedUserData); 
             
-            // Actualizar localStorage y estado con datos frescos del servidor
             localStorage.setItem('usuario', JSON.stringify(updatedUserData));
             setUser(updatedUserData);
           } else {
-            // Si el servidor dice que no es válido, limpiamos
             localStorage.removeItem('usuario');
             setUser(null);
             setIsLoggedIn(false);
           }
         } catch (serverError) {
-          // Si hay problemas de red, mantenemos la sesión local
           console.log("No se pudo verificar la sesión con el servidor:", serverError);
         }
       } else {
-        // Si no hay datos en localStorage, no hay sesión
         setUser(null);
         setIsLoggedIn(false);
       }
@@ -64,7 +54,6 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Función para actualizar el estado cuando el usuario inicia sesión
   const updateAuthState = useCallback((userData = null) => {
     if (userData) {
       setUser(userData);
@@ -74,29 +63,23 @@ const AuthProvider = ({ children }) => {
     }
   }, [checkAuthStatus]);
 
-  // Función para actualizar los datos del usuario
   const updateUser = useCallback((updatedUserData) => {
     if (updatedUserData) {
-      // Mantener el token existente
       const currentToken = user?.token;
       const newUserData = {
         ...updatedUserData,
         token: currentToken
       };
       
-      // Actualizar localStorage
       localStorage.setItem('usuario', JSON.stringify(newUserData));
       
-      // Actualizar estado
       setUser(newUserData);
     }
   }, [user]);
 
-  // Verificar autenticación al cargar la aplicación
   useEffect(() => {
     checkAuthStatus();
     
-    // Escuchar los eventos de storage para sincronizar el estado entre pestañas
     const handleStorageChange = (event) => {
       if (event.key === 'usuario') {
         checkAuthStatus();
@@ -107,7 +90,6 @@ const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [checkAuthStatus]);
 
-  // Valores que exponemos en el contexto
   const contextValue = {
     user,
     isLoggedIn,

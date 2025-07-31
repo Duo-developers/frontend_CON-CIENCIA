@@ -3,14 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { usePasswordReset } from '../../shared/hooks/usePasswordReset';
 import { useAuth } from '../../shared/context/useAuth';
 
-// Componente de icono para la contraseña
 const LockIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
   </svg>
 );
 
-// Componente de icono para mostrar/ocultar contraseña
 const EyeIcon = ({ show }) => show ? (
   <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -44,7 +42,6 @@ export default function ResetPasswordForm({ token }) {
       return false;
     }
     
-    // Validación más completa
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumber = /\d/.test(password);
@@ -67,14 +64,10 @@ export default function ResetPasswordForm({ token }) {
     const result = await confirmReset(token, password);
     
     if (result.success && result.token) {
-      // Si la respuesta incluye un token, podemos iniciar sesión automáticamente
-      // Solo guardamos el token en localStorage
       localStorage.setItem('usuario', JSON.stringify({ token: result.token }));
       
-      // En vez de actualizar el estado directamente, lo verificamos en el servidor
       updateAuthState();
       
-      // Redirigir después de un breve retraso para que el usuario vea el mensaje de éxito
       setTimeout(() => {
         navigate('/');
       }, 1500);

@@ -8,13 +8,11 @@ export function useUserAccount() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Actualizar información del perfil
   const updateProfile = async (userData) => {
     setLoading(true);
     setError(null);
 
     try {
-      // Filtrar solo los campos que han cambiado
       const filteredData = {};
       
       if (userData.name && userData.name !== user.name) {
@@ -27,7 +25,6 @@ export function useUserAccount() {
         filteredData.username = userData.username;
       }
 
-      // Si no hay cambios, devolver éxito sin hacer la petición
       if (Object.keys(filteredData).length === 0) {
         toast.success('No hay cambios para guardar');
         return { success: true, user: user };
@@ -36,9 +33,7 @@ export function useUserAccount() {
       console.log('Datos a enviar al backend:', filteredData);
       const response = await authService.updateUser(filteredData);
       
-      // El backend devuelve { success: true, msg: string, user: {...} }
       if (response.success) {
-        // Combinar los datos actuales del usuario con los datos actualizados del backend
         const updatedUser = {
           ...user,
           ...response.user
@@ -54,9 +49,7 @@ export function useUserAccount() {
       let errorMessage = 'Error al actualizar el perfil';
       
       if (err.response && err.response.data) {
-        // Manejar errores específicos de validación
         if (err.response.data.errors) {
-          // Formato de errores de express-validator
           const errorMessages = err.response.data.errors.map(e => e.msg).join(', ');
           errorMessage = errorMessages;
         } else {
@@ -74,7 +67,6 @@ export function useUserAccount() {
     }
   };
 
-  // Cambiar contraseña
   const changePassword = async (currentPassword, newPassword) => {
     setLoading(true);
     setError(null);
@@ -85,7 +77,6 @@ export function useUserAccount() {
         newPassword
       });
       
-      // Asumiendo que el backend devuelve { success: true }
       if (response.success || response.ok) {
         toast.success('Contraseña actualizada correctamente');
         return { success: true };
@@ -110,20 +101,17 @@ export function useUserAccount() {
     }
   };
 
-  // Actualizar foto de perfil
   const updateProfilePicture = async (file) => {
     setLoading(true);
     setError(null);
 
     try {
       const formData = new FormData();
-      formData.append('image', file); // Corregido: 'image' en lugar de 'imagen'
+      formData.append('image', file); 
 
       const response = await authService.updateProfilePicture(formData);
       
-      // El backend devuelve { success: true, message: string, profilePicture: string }
       if (response.success) {
-        // Actualizar el usuario con la nueva URL de la imagen
         const updatedUser = { ...user, perfil: response.profilePicture };
         updateUser(updatedUser);
         toast.success('Foto de perfil actualizada correctamente');
@@ -149,7 +137,6 @@ export function useUserAccount() {
     }
   };
 
-  // Limpiar mensajes
   const clearMessages = () => {
     setError(null);
   };

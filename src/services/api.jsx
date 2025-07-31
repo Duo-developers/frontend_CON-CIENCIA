@@ -36,8 +36,7 @@ apiClient.interceptors.response.use(
     }
 );
 
-// --- Funciones de Autenticación ---
-
+// Funciones de autenticación
 export const login = async (data) => {
     return await apiClient.post('/auth/login', data);
 }
@@ -50,11 +49,6 @@ export const register = async (data) => {
     });
 }
 
-/**
- * Solicita un correo de recuperación de contraseña
- * @param {string} email - Correo electrónico del usuario
- * @returns {Promise} Promesa con la respuesta del servidor
- */
 export const requestPasswordReset = async (email) => {
     try {
         const response = await apiClient.post('/auth/forgot-password', { email });
@@ -65,12 +59,6 @@ export const requestPasswordReset = async (email) => {
     }
 }
 
-/**
- * Restablece la contraseña utilizando un token
- * @param {string} token - Token de restablecimiento
- * @param {string} password - Nueva contraseña
- * @returns {Promise} Promesa con la respuesta del servidor
- */
 export const resetPassword = async (token, password) => {
     try {
         const response = await apiClient.post(`/auth/reset-password/${token}`, { password });
@@ -82,12 +70,6 @@ export const resetPassword = async (token, password) => {
 }
 
 // --- Funciones de Usuario ---
-
-/**
- * Obtiene los datos del usuario actualmente autenticado.
- * Llama al endpoint `/user/me` que es manejado por el controlador `getUserLogged` en el backend.
- * @returns {Promise} La promesa con la respuesta del API que contiene los datos del usuario.
- */
 export const getCurrentUser = async () => {
     try {
         const response = await apiClient.get('/user/me');
@@ -99,14 +81,8 @@ export const getCurrentUser = async () => {
     }
 }
 
-/**
- * Actualiza la información del perfil del usuario autenticado.
- * @param {Object} userData - Los datos del usuario a actualizar (name, email, username)
- * @returns {Promise} La promesa con la respuesta del API
- */
 export const updateUser = async (userData) => {
     try {
-        // Usar la ruta correcta del backend: PUT /user/me
         const response = await apiClient.put('/user/me', userData);
         return response.data;
     } catch (error) {
@@ -115,14 +91,8 @@ export const updateUser = async (userData) => {
     }
 }
 
-/**
- * Actualiza la contraseña del usuario autenticado.
- * @param {Object} passwordData - Objeto con currentPassword y newPassword
- * @returns {Promise} La promesa con la respuesta del API
- */
 export const updatePassword = async (passwordData) => {
     try {
-        // Usar la ruta correcta del backend: PATCH /user/password
         const response = await apiClient.patch('/user/password', passwordData);
         return response.data;
     } catch (error) {
@@ -131,14 +101,8 @@ export const updatePassword = async (passwordData) => {
     }
 }
 
-/**
- * Actualiza la foto de perfil del usuario autenticado.
- * @param {FormData} formData - FormData con la imagen
- * @returns {Promise} La promesa con la respuesta del API
- */
 export const updateProfilePicture = async (formData) => {
     try {
-        // Usar la ruta correcta del backend: PATCH /user/me/profile-picture
         const response = await apiClient.patch('/user/me/profile-picture', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

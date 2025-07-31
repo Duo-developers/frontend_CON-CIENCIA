@@ -4,7 +4,6 @@ import { AppRoutes } from './routes'
 import AuthProvider from './shared/context/AuthProvider'
 import { Toaster } from 'react-hot-toast'
 
-// App.jsx - Aplicación principal de CON-CIENCIA
 export function App() {
   return (
     <AuthProvider>
@@ -15,7 +14,6 @@ export function App() {
         </main>
         <Footer />
         
-        {/* Configuración global de react-hot-toast */}
         <Toaster
           position="top-right"
           reverseOrder={false}
@@ -23,7 +21,6 @@ export function App() {
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
-            // Configuración por defecto para todos los toasts
             duration: 4000,
             style: {
               background: '#fff',
@@ -32,7 +29,6 @@ export function App() {
               borderRadius: '8px',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             },
-            // Estilos específicos por tipo
             success: {
               duration: 3000,
               style: {

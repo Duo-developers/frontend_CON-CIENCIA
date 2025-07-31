@@ -3,13 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { register } from '../../services/api';
 import toast from 'react-hot-toast';
 
-/**
- * Hook personalizado para gestionar la lógica del formulario de registro.
- * Encapsula el estado del formulario, el manejo de cambios, la validación
- * y la comunicación con el API.
- */
+
 export const useRegister = () => {
-  // Estado para los campos de texto del formulario.
   const [formData, setFormData] = useState({
     username: '',
     name: '',
@@ -18,30 +13,25 @@ export const useRegister = () => {
     confirmPassword: '',
   });
   
-  // Estado para el archivo de imagen.
   const [imageFile, setImageFile] = useState(null);
   
-  // Estados para la UI: errores y estado de carga.
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Maneja los cambios en los inputs de texto.
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    if (error) setError(null); // Limpia el error al empezar a escribir.
+    if (error) setError(null); 
   };
 
-  // Maneja la selección de un archivo de imagen.
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
-  // Procesa el envío del formulario.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -49,14 +39,12 @@ export const useRegister = () => {
 
     const { username, name, email, password, confirmPassword } = formData;
 
-    // Validaciones del lado del cliente.
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden.');
       setIsLoading(false);
       return;
     }
 
-    // Construye el objeto FormData para enviar los datos, incluyendo la imagen.
     const dataToSend = new FormData();
     dataToSend.append('username', username);
     dataToSend.append('name', name);
@@ -72,7 +60,6 @@ export const useRegister = () => {
         duration: 3000,
       });
       
-      // Esperar un poco antes de redirigir para que el usuario vea el mensaje
       setTimeout(() => {
         navigate('/login');
       }, 1500);
@@ -85,7 +72,6 @@ export const useRegister = () => {
     }
   };
 
-  // Retorna el estado y las funciones que el componente necesitará.
   return {
     formData,
     isLoading,

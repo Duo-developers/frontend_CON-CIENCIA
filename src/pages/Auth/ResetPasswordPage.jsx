@@ -5,7 +5,6 @@ import ResetPasswordForm from '../../components/auth/ResetPasswordForm';
 export function ResetPasswordPage() {
   const { token } = useParams();
   
-  // Validación básica: si no hay token, redirigir a página de error
   if (!token) {
     return <Navigate to="/error" replace />;
   }

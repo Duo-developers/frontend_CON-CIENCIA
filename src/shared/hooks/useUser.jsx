@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getCurrentUser } from '../../services/api';
 
-/**
- * Hook para gestionar el estado de autenticación y los datos del usuario en toda la aplicación.
- * YA NO contiene la lógica de logout.
- */
 export const useUser = () => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +38,5 @@ export const useUser = () => {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
-  // Se ha eliminado la función logout de este hook.
   return { user, isLoggedIn, isLoading };
 };

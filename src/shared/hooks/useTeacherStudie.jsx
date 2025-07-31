@@ -1,4 +1,3 @@
-// hooks/useArticles.jsx
 import { useState, useEffect } from 'react';
 import { getMyArticles, createArticle, updateArticle, deleteArticle } from '../../services/api';
 

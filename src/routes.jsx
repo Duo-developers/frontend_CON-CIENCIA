@@ -7,7 +7,7 @@ import SobreNosotros from './components/homeNosotros/homeNosotros'
 import { RegisterPage } from './pages/Auth'
 import { TeacherStudio } from './pages/TeacherStudio'
 import { AdminStudio } from './pages/AdminStudio'
-import { MyAccountPage } from './pages/MyAccountPage'
+import { MyAccountPage } from './pages/AccountPage/MyAccountPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { ForgotPasswordPage } from './pages/Auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/Auth/ResetPasswordPage';
