@@ -26,6 +26,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     fetchArticles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) return <p className="text-gray-500">Cargando artículos...</p>;

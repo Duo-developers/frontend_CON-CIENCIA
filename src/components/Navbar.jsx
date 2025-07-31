@@ -213,6 +213,38 @@ export function Navbar() {
     );
   };
 
+  // Renderizado condicional de enlaces de navegación
+  const renderNavLinks = () => (
+    <>
+      <Link to="/" className={`transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
+      
+      {isLoggedIn && (
+        <>
+          <Link to="/blog" className={`transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
+          <Link to="/eventos" className={`transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
+        </>
+      )}
+      
+      <Link to="/sobre-nosotros" className={`transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
+    </>
+  );
+
+  // Renderizado condicional de enlaces para móvil
+  const renderMobileNavLinks = () => (
+    <>
+      <Link to="/" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
+      
+      {isLoggedIn && (
+        <>
+          <Link to="/blog" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
+          <Link to="/eventos" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
+        </>
+      )}
+      
+      <Link to="/sobre-nosotros" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
+    </>
+  );
+
   return (
     <header className="bg-light-bg/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -225,11 +257,9 @@ export function Navbar() {
           <span className="text-2xl font-bold text-dark-text tracking-tighter">CON-CIENCIA</span>
         </Link>
         
+        {/* Enlaces de navegación para pantallas medianas y grandes */}
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className={`transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
-          <Link to="/blog" className={`transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
-          <Link to="/eventos" className={`transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
-          <Link to="/sobre-nosotros" className={`transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
+          {renderNavLinks()}
         </div>
 
         {/* Sección de autenticación dinámica */}
@@ -255,10 +285,7 @@ export function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-light-bg border-t border-gray-200" id="mobile-menu">
           <div className="px-6 py-4 space-y-2">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
-            <Link to="/blog" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
-            <Link to="/eventos" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/eventos') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Eventos</Link>
-            <Link to="/sobre-nosotros" onClick={() => setIsMenuOpen(false)} className={`block transition-colors duration-300 ${isActive('/sobre-nosotros') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Sobre Nosotros</Link>
+            {renderMobileNavLinks()}
             {renderMobileAuthSection()}
           </div>
         </div>
