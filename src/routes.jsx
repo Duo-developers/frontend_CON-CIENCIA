@@ -11,6 +11,8 @@ import { MyAccountPage } from './pages/AccountPage/MyAccountPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { ForgotPasswordPage } from './pages/Auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/Auth/ResetPasswordPage';
+import ArticleDetailPage from './pages/ArticleDetailPage' 
+
 
 export function AppRoutes() {
   return (
@@ -24,6 +26,9 @@ export function AppRoutes() {
       <Route path='/register' element={<RegisterPage />}/>
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+      {/* Nueva ruta dinámica para ver artículo con comentarios */}
+      <Route path='/article/:id' element={<ArticleDetailPage />} />
       
       {/* Rutas Protegidas */}
       <Route path='/mi-cuenta' element={
