@@ -50,6 +50,37 @@ export const register = async (data) => {
     });
 }
 
+/**
+ * Solicita un correo de recuperación de contraseña
+ * @param {string} email - Correo electrónico del usuario
+ * @returns {Promise} Promesa con la respuesta del servidor
+ */
+export const requestPasswordReset = async (email) => {
+    try {
+        const response = await apiClient.post('/auth/forgot-password', { email });
+        return response.data;
+    } catch (error) {
+        console.error("Error en requestPasswordReset:", error);
+        throw error;
+    }
+}
+
+/**
+ * Restablece la contraseña utilizando un token
+ * @param {string} token - Token de restablecimiento
+ * @param {string} password - Nueva contraseña
+ * @returns {Promise} Promesa con la respuesta del servidor
+ */
+export const resetPassword = async (token, password) => {
+    try {
+        const response = await apiClient.post(`/auth/reset-password/${token}`, { password });
+        return response.data;
+    } catch (error) {
+        console.error("Error en resetPassword:", error);
+        throw error;
+    }
+}
+
 // --- Funciones de Usuario ---
 
 /**
