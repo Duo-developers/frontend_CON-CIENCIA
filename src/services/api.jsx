@@ -142,6 +142,10 @@ export const postComment = (articleId, data) => apiClient.post(`/comment/${artic
 export const editComment = (commentId, data) => apiClient.put(`/comment/${commentId}`, data);
 export const deleteComment = (commentId) => apiClient.delete(`/comment/${commentId}`);
 
+export const getAllUsers = () => apiClient.get('/user');
+export const updateUserRole = (uid, role) => apiClient.patch(`/user/${uid}/role`, { role });
+export const deleteUser = (uid) => apiClient.delete(`/user/${uid}`);
+
 // Objeto de servicios de autenticación y usuario
 export const authService = {
     login,
