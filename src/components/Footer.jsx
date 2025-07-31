@@ -5,7 +5,6 @@ export function Footer() {
     <footer className="footer-dark mt-16 text-white">
       <div className="container mx-auto px-6 py-10">
         <div className="md:flex md:justify-between">
-          {/* Logo y descripción */}
           <div className="mb-8 md:mb-0">
             <Link to="/" className="flex items-center space-x-3">
               <img 
@@ -20,7 +19,6 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Grid de columnas de información */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
             {/* Navegación */}
             <div>
@@ -93,7 +91,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Separador */}
         <hr className="my-8 border-gray-800" />
 
         {/* Copyright */}

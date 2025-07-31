@@ -115,18 +115,16 @@ export const updateProfilePicture = async (formData) => {
     }
 }
 
-
-
 // Artículos
 export const createArticle = (data) => apiClient.post('/article', data);
-export const getMyArticles = () => apiClient.get('/article'); // singular
+export const getMyArticles = () => apiClient.get('/article'); 
 export const getArticleById = (id) => apiClient.get(`/article/${id}`);
 export const updateArticle = (id, data) => apiClient.put(`/article/${id}`, data);
 export const deleteArticle = (id) => apiClient.delete(`/article/${id}`);
 
 // Eventos
 export const createEvent = (data) => apiClient.post('/event', data);
-export const getMyEvents = () => apiClient.get('/event'); // singular
+export const getMyEvents = () => apiClient.get('/event');
 export const getEventById = (id) => apiClient.get(`/event/${id}`);
 export const updateEvent = (id, data) => apiClient.put(`/event/${id}`, data);
 export const deleteEvent = (id) => apiClient.delete(`/event/${id}`);

@@ -11,7 +11,6 @@ export function Navbar() {
   const { logout } = useLogout();
   const profileMenuRef = useRef(null);
 
-  // Cierra el menú de perfil si se hace clic fuera de él
   useEffect(() => {
     function handleClickOutside(event) {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -32,9 +31,8 @@ export function Navbar() {
     return location.pathname === path;
   };
 
-  // Componente para el avatar del usuario
   const UserAvatar = ({ user }) => {
-    console.log("Datos de usuario para avatar:", user); // Para depuración
+    console.log("Datos de usuario para avatar:", user); 
     
     return (
       <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-2 border-primary-blue hover:border-blue-700 transition-colors shadow-md">
@@ -49,7 +47,6 @@ export function Navbar() {
     );
   };
 
-  // Renderiza el botón de CON-CIENCIA STUDIO según el rol del usuario
   const renderStudioButton = () => {
     if (!isLoggedIn || !user || !user.role) return null;
 
@@ -78,7 +75,6 @@ export function Navbar() {
     return null;
   };
 
-  // Renderiza la sección de autenticación (escritorio)
   const renderAuthSection = () => {
     if (isLoading) {
       return <div className="text-sm text-gray-500">Cargando...</div>;
@@ -149,7 +145,6 @@ export function Navbar() {
     );
   };
   
-  // Renderiza la sección de autenticación (móvil)
   const renderMobileAuthSection = () => {
     if (isLoading) {
       return <div className="text-sm text-gray-500 px-6 py-2">Cargando...</div>;
@@ -166,7 +161,6 @@ export function Navbar() {
             </div>
           </div>
           
-          {/* Botón de CON-CIENCIA STUDIO para móvil según rol */}
           {user.role === 'TEACHER_ROLE' && (
             <Link 
               to="/teacher-studio" 
@@ -222,7 +216,6 @@ export function Navbar() {
   return (
     <header className="bg-light-bg/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
           <img 
             src="https://res.cloudinary.com/dwc4ynoj9/image/upload/v1752967389/Logo_bkphtw.png" 
@@ -232,7 +225,6 @@ export function Navbar() {
           <span className="text-2xl font-bold text-dark-text tracking-tighter">CON-CIENCIA</span>
         </Link>
         
-        {/* Navegación de escritorio */}
         <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className={`transition-colors duration-300 ${isActive('/') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Inicio</Link>
           <Link to="/blog" className={`transition-colors duration-300 ${isActive('/blog') ? 'text-primary-blue font-semibold' : 'text-medium-text hover:text-primary-blue'}`}>Blog</Link>
