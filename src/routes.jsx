@@ -3,7 +3,7 @@ import { Home } from './pages/Home'
 import { LoginPage } from './pages/Auth'
 import BlogPage from './components/Homeblog/Homeblog'
 import EventosPage from './components/homeEvent/homeEvent'
-import SobreNosotros from './components/homeNosotros/homeNosotros'
+import SobreNosotrosPage from './pages/SobreNosotrosPage'
 import { RegisterPage } from './pages/Auth'
 import { TeacherStudio } from './pages/Teacher-Role/TeacherStudio'
 import { AdminStudio } from './pages/AdminStudio'
@@ -19,7 +19,7 @@ export function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path='/blog' element={<BlogPage />}/>
       <Route path='/eventos' element={<EventosPage />}/>
-      <Route path='/sobre-nosotros' element={<SobreNosotros />}/>
+      <Route path='/sobre-nosotros' element={<SobreNosotrosPage />}/>
       <Route path='/login' element={<LoginPage />}/>
       <Route path='/register' element={<RegisterPage />}/>
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
