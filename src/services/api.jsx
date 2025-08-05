@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: 'https://backend-con-ciencia.vercel.app/conciencia/v1/',
+    baseURL: 'http://localhost:3001/conciencia/v1/',
     timeout: 10000,
 });
 
@@ -111,6 +111,16 @@ export const updateProfilePicture = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error en updateProfilePicture:", error);
+        throw error;
+    }
+}
+
+export const removeProfilePicture = async () => {
+    try {
+        const response = await apiClient.delete('/user/me/profile-picture');
+        return response.data;
+    } catch (error) {
+        console.error("Error en removeProfilePicture:", error);
         throw error;
     }
 }
