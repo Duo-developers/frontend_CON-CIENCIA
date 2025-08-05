@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useProfileImage } from '../../shared/hooks/useProfileImage';
 import { UserAvatar } from './UserAvatar';
-import { useUserAccount } from '../../shared/hooks/useUserAccount';
 
-export const ImageUploader = () => {
-  const { user } = useUserAccount();
+export const ImageUploader = ({ user, setUser }) => {
   const {
     profileImage,
     previewImage,
@@ -15,13 +13,43 @@ export const ImageUploader = () => {
     handleDrop,
     resetImage,
     handleImageSubmit,
-    loading
-  } = useProfileImage();
+    handleRemoveProfilePicture,
+    loading,
+    success,
+    error,
+    clearMessages
+  } = useProfileImage(user, setUser);
+  
+  // Limpiar mensajes después de 5 segundos
+  useEffect(() => {
+    if (success || error) {
+      const timer = setTimeout(() => {
+        clearMessages();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [success, error, clearMessages]);
   
   return (
     <div className="space-y-6">
+      {success && (
+        <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
+          {success}
+        </div>
+      )}
+      
+      {error && (
+        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          {error}
+        </div>
+      )}
+      
       <div className="flex flex-col items-center">
-        <UserAvatar user={user} previewImage={null} size="large" />
+        <UserAvatar 
+          user={user} 
+          previewImage={previewImage} 
+          size="large" 
+        />
         <p className="text-sm text-gray-500 mt-2">Foto de perfil actual</p>
       </div>
 
@@ -77,13 +105,26 @@ export const ImageUploader = () => {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading || !profileImage}
-          className="w-full bg-primary-blue text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-        >
-          {loading ? 'Subiendo...' : profileImage ? 'Actualizar Foto de Perfil' : 'Selecciona una imagen'}
-        </button>
+        <div className="flex space-x-3">
+          <button
+            type="submit"
+            disabled={loading || !profileImage}
+            className="flex-1 bg-primary-blue text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+          >
+            {loading ? 'Subiendo...' : profileImage ? 'Actualizar Foto de Perfil' : 'Selecciona una imagen'}
+          </button>
+          
+          {user?.perfil && (
+            <button
+              type="button"
+              onClick={handleRemoveProfilePicture}
+              disabled={loading}
+              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            >
+              {loading ? 'Eliminando...' : 'Eliminar foto'}
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

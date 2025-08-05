@@ -8,7 +8,7 @@ import { PasswordForm } from '../../components/myProfile/PasswordForm';
 import { ImageUploader } from '../../components/myProfile/ImageUploader';
 
 export function MyAccountPage() {
-  const { user, error, success } = useUserAccount();
+  const { user, setUser, error, success } = useUserAccount();
   const [activeTab, setActiveTab] = useState('profile');
 
   return (
@@ -45,14 +45,14 @@ export function MyAccountPage() {
               </div>
             )}
 
-            {/* Tab: Información Personal */}
-            {activeTab === 'profile' && <ProfileForm />}
+            {/* Tab: Información Personal - PASANDO LAS PROPS NECESARIAS */}
+            {activeTab === 'profile' && <ProfileForm user={user} setUser={setUser} />}
 
-            {/* Tab: Seguridad */}
-            {activeTab === 'security' && <PasswordForm />}
+            {/* Tab: Seguridad - PASANDO LAS PROPS NECESARIAS */}
+            {activeTab === 'security' && <PasswordForm user={user} />}
 
-            {/* Tab: Foto de Perfil */}
-            {activeTab === 'avatar' && <ImageUploader />}
+            {/* Tab: Foto de Perfil - PASANDO LAS PROPS NECESARIAS */}
+            {activeTab === 'avatar' && <ImageUploader user={user} setUser={setUser} />}
           </div>
         </div>
       </div>
